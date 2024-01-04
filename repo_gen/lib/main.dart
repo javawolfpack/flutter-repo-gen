@@ -93,54 +93,62 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding: const EdgeInsets.all(20.0),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (BuildContext context, int index){
-                    return Card(
-                      shadowColor: Colors.white70,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ListTile(
-                            title: Text(
-                              snapshot.data![index]['program'] + ' ' 
-                              + snapshot.data![index]['number'].toString() + ' '
-                              + snapshot.data![index]['coursename'],
-                              style: const TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
+                    return GestureDetector(
+                      onTap: () {
+                        if(kDebugMode){
+                          print('Go to form: ${snapshot.data![index]['coursename']}');
+                        }
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => RepoForm(course: snapshot.data![index])),
+                        );
+                      },
+                      child: Card(
+                        shadowColor: Colors.white70,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ListTile(
+                              title: Text(
+                                '${snapshot.data![index]['program']} ${snapshot.data![index]['number'].toString()} ${snapshot.data![index]['coursename']}',
+                                style: const TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text(
+                                '${snapshot.data![index]['semester']} ${snapshot.data![index]['year'].toString()}',
+                                style: const TextStyle(fontSize: 16),
                               ),
                             ),
-                            subtitle: Text(
-                              snapshot.data![index]['semester'] + ' '
-                              + snapshot.data![index]['year'].toString(),
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                          ),
-                          // Padding(
-                          //   padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                          //   child: Text(
-                          //     snapshot.data![index]['program'] + ' ' 
-                          //     + snapshot.data![index]['number'].toString(),
-                          //     style: const TextStyle(
-                          //       fontSize: 20.0,
-                          //       fontWeight: FontWeight.bold,
-                          //     ),
-                          //   ),
-                          // ),
-                          // Padding(
-                          //   padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                          //   child: Text(snapshot.data![index]['coursename'],
-                          //     style: const TextStyle(fontSize: 20.0),
-                          //   ),
-                          // ),
-                          // Padding(
-                          //   padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                          //   child: Text(
-                          //     snapshot.data![index]['semester'] + ' '
-                          //     + snapshot.data![index]['year'].toString(),
-                          //     style: const TextStyle(fontSize: 16),
-                          //   ),
-                          // ),
-                      
-                        ],
+                            // Padding(
+                            //   padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                            //   child: Text(
+                            //     snapshot.data![index]['program'] + ' ' 
+                            //     + snapshot.data![index]['number'].toString(),
+                            //     style: const TextStyle(
+                            //       fontSize: 20.0,
+                            //       fontWeight: FontWeight.bold,
+                            //     ),
+                            //   ),
+                            // ),
+                            // Padding(
+                            //   padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                            //   child: Text(snapshot.data![index]['coursename'],
+                            //     style: const TextStyle(fontSize: 20.0),
+                            //   ),
+                            // ),
+                            // Padding(
+                            //   padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                            //   child: Text(
+                            //     snapshot.data![index]['semester'] + ' '
+                            //     + snapshot.data![index]['year'].toString(),
+                            //     style: const TextStyle(fontSize: 16),
+                            //   ),
+                            // ),
+                        
+                          ],
+                        ),
                       ),
                     );
                   },
@@ -149,16 +157,16 @@ class _MyHomePageState extends State<MyHomePage> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const RepoForm(id: 0))
-          );
-        },
-        tooltip: 'Get Courses',
-        child: const Icon(Icons.school),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: (){
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => const RepoForm(id: 0))
+      //     );
+      //   },
+      //   tooltip: 'Get Courses',
+      //   child: const Icon(Icons.school),
+      // ),
     );
   }
 }
