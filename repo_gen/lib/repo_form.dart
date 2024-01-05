@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-//import 'repo.dart';
 import 'success.dart';
 
 class RepoForm extends StatefulWidget{
@@ -25,9 +24,9 @@ class _MyRepoFormState extends State<RepoForm> {
   final _gitlabcontroller = TextEditingController();
   final _tokencontroller = TextEditingController();
 
-
   Future<String>? _formError;
 
+  /* Validators */
   String? _textValidator(String? value){
     if (value == null || value.isEmpty) {
       return 'This field cannot be empty';
@@ -54,7 +53,7 @@ class _MyRepoFormState extends State<RepoForm> {
         print(response.statusCode);
         print(response.body);
       }
-      throw Exception('GitHub Username failure');
+      throw Exception('GitHub Username failure - check that the username you entered matches your GitHub username exactly.');
     }
   }
 
@@ -77,7 +76,7 @@ class _MyRepoFormState extends State<RepoForm> {
         print(response.statusCode);
         print(response.body);
       }
-      throw Exception('GitLab Username failure');
+      throw Exception('GitLab Username failure - check that the username you entered matches your GitLab username exactly.');
     }
   }
 
@@ -104,10 +103,43 @@ class _MyRepoFormState extends State<RepoForm> {
         print(response.statusCode);
         print(response.body);
       }
-      throw Exception('Course Token failure');
+      throw Exception('Course Token failure - Check that you have entered the correct Course Token.');
     }
   }
 
+  Future<String> _githubteamvalidate(String value) async {
+    final response = await http.post(
+      //Uri.parse('http://10.100.100.29:8080/api/testgithubteam/'),
+      Uri.parse('http://10.100.100.29:8080/api/testgithubrepo/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'id': widget.course['id'],
+        'githubusername' : value,
+        'firstname': widget.course['firstname'],
+        'lastname': widget.course['lastname'],
+      })
+    );
+
+    if (response.statusCode == 200) {
+      // If server returns a 200 OK response, parse the JSON.
+      if (kDebugMode) {
+        print('GitHub Team status code: ${response.statusCode}');
+        print(response.body);
+      }
+      return value;
+    } else {
+      if(kDebugMode){
+        print(response.statusCode);
+        print(response.body);
+      }
+      throw Exception(
+        'GitHub Team failure - a repo has already been generated for you for ${widget.course['coursename']}. Contact your instructor about getting the repo renamed for this semester.');
+    }
+  }
+
+  /* Create Repo and Submit Form */
   // Ref: https://docs.flutter.dev/cookbook/networking/send-data
   Future<String> createRepo(String firstname, String lastname, String githubusername, String gitlabusername, String coursetoken) async {
     if(kDebugMode){
@@ -118,6 +150,10 @@ class _MyRepoFormState extends State<RepoForm> {
       String hub = await _githubvalidate(githubusername);
       if(kDebugMode){
         print('github username: $hub');
+      }
+      String team = await _githubteamvalidate(githubusername);
+      if(kDebugMode){
+        print('github team confirmed: $team');
       }
     }
 
@@ -163,7 +199,7 @@ class _MyRepoFormState extends State<RepoForm> {
       _tokencontroller.clear();
       return response.body;
     } else {
-      // If the server did not return a 201 CREATED response,
+      // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to create repo.');
     }
@@ -187,17 +223,6 @@ class _MyRepoFormState extends State<RepoForm> {
         });
       });
       _formKey.currentState?.save();
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //     content: const Text('Processing...'),
-      //     action: SnackBarAction(
-      //       label: 'Return to Course Page',
-      //       onPressed: () {
-      //         Navigator.pop(context);
-      //       }
-      //     )
-      //   )
-      // );
     }
   }
 
@@ -215,7 +240,6 @@ class _MyRepoFormState extends State<RepoForm> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(32.0),
-        //child: (_futureRepo != null) ? buildForm() : buildSuccess(), 
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -237,10 +261,6 @@ class _MyRepoFormState extends State<RepoForm> {
                       icon: Icon(Icons.face),
                       labelText: 'First Name *',
                     ),
-                    onSaved: (String? value) {
-                      // This optional block of code can be used to run
-                      // code when the user saves the form.
-                    },
                     validator: _textValidator,
                   ),
                   TextFormField(
@@ -249,10 +269,6 @@ class _MyRepoFormState extends State<RepoForm> {
                       icon: Icon(Icons.person_rounded),
                       labelText: 'Last Name *',
                     ),
-                    onSaved: (String? value) {
-                      // This optional block of code can be used to run
-                      // code when the user saves the form.
-                    },
                     validator: _textValidator,
                   ),
                   widget.course['github'] ? TextFormField(
@@ -261,10 +277,6 @@ class _MyRepoFormState extends State<RepoForm> {
                       icon: Icon(Icons.code),
                       labelText: 'GitHub Username *',
                     ),
-                    onSaved: (String? value) {
-                      // This optional block of code can be used to run
-                      // code when the user saves the form.
-                    },
                     validator: _textValidator,
                   ) : const SizedBox.shrink(),
                   widget.course['gitlab'] ? TextFormField(
@@ -273,10 +285,6 @@ class _MyRepoFormState extends State<RepoForm> {
                       icon: Icon(Icons.code),
                       labelText: 'GitLab Username *',
                     ),
-                    onSaved: (String? value) {
-                      // This optional block of code can be used to run
-                      // code when the user saves the form.
-                    },
                     validator: _textValidator,
                   ) : const SizedBox.shrink(),
                   TextFormField(
@@ -285,10 +293,6 @@ class _MyRepoFormState extends State<RepoForm> {
                       icon: Icon(Icons.token),
                       labelText: 'Course Token (Given in Lecture) *',
                     ),
-                    onSaved: (String? value) {
-                      // This optional block of code can be used to run
-                      // code when the user saves the form.
-                    },
                     validator: _textValidator,
                   ),
                   Padding(
@@ -316,7 +320,7 @@ class _MyRepoFormState extends State<RepoForm> {
                     } else if(snapshot.hasError){
                       return Text('${snapshot.error}',
                         style: const TextStyle(
-                          color: Colors.red,
+                          color: Colors.redAccent,
                         ),
                       );
                     } else{
