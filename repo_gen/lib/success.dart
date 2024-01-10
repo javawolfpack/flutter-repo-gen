@@ -6,7 +6,7 @@ final Uri _url211 = Uri.parse('https://github.com/CSUChico-CSCI211');
 final Uri _url440 = Uri.parse('https://github.com/CSUChico-CSCI440');
 final Uri _url467 = Uri.parse('https://gitlab.com/CSUChico/CSUC-CINS467');
 final Uri _url490 = Uri.parse('https://github.com/CSUChico-CSCI490');
-final Uri _url640 = Uri.parse('');
+final Uri _url640 = Uri.parse('https://github.com/CSUChico-CSCI640');
 
 class SuccessPage extends StatefulWidget {
   const SuccessPage({super.key, required this.course});
@@ -69,29 +69,53 @@ class _SuccessPageState extends State<SuccessPage> {
                   fontSize: 24.0,
                 )
               ),
-              Padding(
+              widget.course['github'] ? Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).popUntil((route) => route.isFirst);
-                  },
-                  child: const Text('Return to Courses Page'),
+                child: Text('Make sure to visit the ${widget.course['program']} ${widget.course['number']} organization on GitHub within a week (7 days) to accept your invitation',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 18.0,
+                  )
                 ),
-              ),
+              ) : const SizedBox.shrink(),
               widget.course['github'] ? Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                   onPressed: _launchUrl,
-                  child: Text('Go to the ${widget.course['program']} ${widget.course['number']} organization on GitHub'),
+                  style: ElevatedButton.styleFrom(
+                    shadowColor: const Color.fromRGBO(200, 200, 200, 0.8),
+                  ),
+                  child: Text('Go to the ${widget.course['program']} ${widget.course['number']} organization on GitHub',
+                    style: const TextStyle(fontSize: 16.0),
+                  ),
                 ),
               ) : const SizedBox.shrink(),
               widget.course['gitlab'] ? Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                   onPressed: _launchUrl,
-                  child: Text('Go to the ${widget.course['program']} ${widget.course['number']} organization on GitLab'),
+                  style: ElevatedButton.styleFrom(
+                    shadowColor: const Color.fromRGBO(200, 200, 200, 0.8),
+                  ),
+                  child: Text('Go to the ${widget.course['program']} ${widget.course['number']} Group on GitLab',
+                    style: const TextStyle(fontSize: 16.0),
+                  ),
                 ),
               ) : const SizedBox.shrink(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shadowColor: const Color.fromRGBO(200, 200, 200, 0.8),
+                  ),
+                  child: const Text('Return to Courses Page',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

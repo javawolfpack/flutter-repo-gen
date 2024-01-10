@@ -42,7 +42,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // GET all available courses
   Future<List<dynamic>> getCourses() async {
-    var url = Uri.http('10.100.100.29:8080', '/api/courses');
+    //var url = Uri.http('10.100.100.29:8080', '/api/courses');
+    var url = Uri.https('repo.bryandixon.phd', '/api/courses');
     var response = await http.get(url,
       headers: {
         "Access-Control-Allow-Origin": "*", // Required for CORS support to work
