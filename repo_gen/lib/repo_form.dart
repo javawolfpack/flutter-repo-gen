@@ -316,7 +316,9 @@ class _MyRepoFormState extends State<RepoForm> {
         print('github team created: $createTeam');
         print('github repo created: $createRepo');
       }
-      return createRepo;
+      if(gitlabusername.isEmpty){
+        return createRepo;
+      }
     }
     // Handle GitLab repos
     if (gitlabusername.isNotEmpty) {

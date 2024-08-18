@@ -83,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (context, snapshot) {
           switch(snapshot.connectionState){
             case ConnectionState.waiting:
-              return const CircularProgressIndicator();
+              return const Center(child: CircularProgressIndicator());
             default:
               if(snapshot.hasError){
                 return Text('Error: ${snapshot.error}');

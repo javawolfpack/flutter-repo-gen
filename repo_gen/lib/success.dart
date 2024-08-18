@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final Uri _url211 = Uri.parse('https://github.com/CSUChico-CSCI211');
+final Uri _url345 = Uri.parse('https://github.com/CSUChico-CSCI345');
 final Uri _url440 = Uri.parse('https://github.com/CSUChico-CSCI440');
 final Uri _url467 = Uri.parse('https://gitlab.com/CSUChico/CSUC-CINS467');
 final Uri _url490 = Uri.parse('https://github.com/CSUChico-CSCI490');
 final Uri _url640 = Uri.parse('https://github.com/CSUChico-CSCI640');
+final Uri _url644 = Uri.parse('https://gitlab.com/CSUChico/CSUC-CSCI644');
 
 class SuccessPage extends StatefulWidget {
   const SuccessPage({super.key, required this.course});
@@ -25,6 +27,9 @@ class _SuccessPageState extends State<SuccessPage> {
       case 211:
         url = _url211;
         break;
+      case 345:
+        url = _url345;
+        break;
       case 440:
         url = _url440;
         break;
@@ -36,6 +41,9 @@ class _SuccessPageState extends State<SuccessPage> {
         break;
       case 640:
         url = _url640;
+        break;
+      case 644:
+        url = _url644;
         break;
     }
     if (!await launchUrl(url)) {
